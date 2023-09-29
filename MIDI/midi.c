@@ -27,36 +27,36 @@ int main() {
 	while (1) {
 		if (_kbhit()) {
 			int key = _getch();
-			if (key == '9') {									// 按下9键切换播放模式	
+			if (key == '9') {						// 按下9键切换播放模式	
 				playMode = (playMode + 1) % 2;
 				printf("Current Mode: %d\n", playMode);
 			}
-			if (key == '=') {									// 按下=键增加力度
+			if (key == '=') {						// 按下=键增加力度
 				velocity = velocity + 10;
 				if (velocity > 127) {
 					velocity = 127;
 				}
 				printf("Current Velocity: %d\n", velocity);
 			}
-			if (key == '-') {									// 按下-键减小力度
+			if (key == '-') {						// 按下-键减小力度
 				velocity = velocity - 10;
 				if (velocity < 0) {
 					velocity = 0;
 				}
 				printf("Current Velocity: %d\n", velocity);
 			}
-			if (key == 27) {									// 按下Esc键退出程序
+			if (key == 27) {						// 按下Esc键退出程序
 				break;
 			}
-			if (key == '0') {									// 按下0键更改音色
+			if (key == '0') {						// 按下0键更改音色
 				instrumentIndex = (instrumentIndex + 1) % 128;
 				ChangeInstrument(handle, instrumentIndex);
 			}
-			if (key == ' ') {									// 按下空格键切换调式
+			if (key == ' ') {						// 按下空格键切换调式
 				ChangeKey();
 				printf("Current Key: %d\n", currentKeyIndex);
 			}
-			if (key >= '1' && key <= '8') {						// 按下1~8键播放音符
+			if (key >= '1' && key <= '8') {			// 按下1~8键播放音符
 				int index = key - '1';
 				// 创建结构体来传递参数
 				struct ThreadParams params;
@@ -66,7 +66,7 @@ int main() {
 
 				switch (playMode) {
 				case 0:
-					if (Channel[index % 8] == 0) {				// 如果当前通道没有音符在播放，就播放音符
+					if (Channel[index % 8] == 0) {	// 如果当前通道没有音符在播放，就播放音符
 						Channel[index % 8] = 1;
 						// 这里创建两个线程，一个用来播放音符(threadHandle)，一个用来检测按键是否松开(_threadHandle)
 						// 原理是在threadHandle线程中持续播放音符，在_threadHandle线程中检测按键是否松开，如果松开就向对应的通道发送NOTE_OFF信号，停止播放音符，并且释放相应的通道，然后结束线程
