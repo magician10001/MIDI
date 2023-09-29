@@ -4,13 +4,13 @@
 
 // 更改音色的函数
 void ChangeInstrument(HMIDIOUT handle, int instrumentIndex) {
-    // 构造 MIDI CONTROL_CHANGE 消息，此处 midiMessage 的格式为 0x**C0 ，**处代表乐器编号，CONTROL_CHANGE 是控制命令
+    // 构造 MIDI CONTROL_CHANGE 消息，此处 midiMessage 的格式为 0x**CN ，**处代表乐器编号，CONTROL_CHANGE = 0xC0 是控制命令，N是通道号
     DWORD midiMessage = instrumentIndex << 8 | CONTROL_CHANGE;
-    // 打印 MIDI 消息
-    printf("MIDI Message: 0x%x (CONTROL_CHANGE) - Channel: %x, Instrument: %s\n",
-        midiMessage, 0, instrument[instrumentIndex].value);
+    printf("Instrument: %s\n",instrument[instrumentIndex].value);
     // 发送 MIDI 消息
-    midiOutShortMsg(handle, midiMessage);
+    for (int i = 0; i < 8; i++) {
+		midiOutShortMsg(handle, midiMessage | i);
+	}
 }
 
 
