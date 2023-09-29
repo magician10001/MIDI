@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// 各种乐器和对应的编号
 struct pair {
     int key;
     char value[30];
