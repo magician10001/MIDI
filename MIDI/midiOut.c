@@ -23,15 +23,14 @@ DWORD WINAPI PlayMidiNoteThread(LPVOID lpParameter) {
     int channel = params->channel;
 
     int note = keyMap[currentKeyIndex][index % 8];          // 音高
-    int volumn = 0x77;                                      // 音量
 
     // 构造 MIDI NOTE_ON 消息
     // 这里的 midiMessage 的格式为 0xvvccnn90 ，vv代表音量，cc代表midi通道，nn代表音高，NOTE_ON 是控制命令
-    DWORD midiMessage = volumn << 20 | channel << 16 | note << 8 | NOTE_ON;
+    DWORD midiMessage = velocity << 16 | channel | note << 8 | NOTE_ON;
 
     // 打印 MIDI 消息
     printf("MIDI Message: 0x%x (NOTE_ON) - Channel: %x, Note: %x, Velocity: %x\n",
-        midiMessage, channel, note, volumn);
+        midiMessage, channel, note, velocity);
     midiOutShortMsg(handle, midiMessage);                   // 发送 MIDI 消息
     Sleep(100000);
 
@@ -45,7 +44,6 @@ DWORD WINAPI keyCheckThread(LPVOID lpParameter) {
     int currentKeyIndex = params->currentKeyIndex;
     int channel = params->channel;
     int note = keyMap[currentKeyIndex][index % 8];
-    int volumn = 0x77;
 
     while (1) {
         if (!(GetAsyncKeyState(index + '1') & 0x8000)) {
@@ -55,7 +53,7 @@ DWORD WINAPI keyCheckThread(LPVOID lpParameter) {
 
     // 发送 NOTE_OFF 消息
     // 将上面 NOTE_ON 消息的 volumn 改为 0x00 即可停止播放
-    DWORD midiMessage = 0x00 << 20 | channel << 16 | note << 8 | NOTE_OFF;
+    DWORD midiMessage = 0x00 << 16 | channel | note << 8 | NOTE_OFF;
     midiOutShortMsg(handle, midiMessage);
 
     Channel[channel] = 0;                                   // 释放通道

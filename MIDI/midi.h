@@ -35,6 +35,8 @@ struct ThreadParams {
     int channel;
 };
 
+int velocity;  // 音量
+
 bool Channel[8];  // 通道状态
 
 bool playMode;  // 播放模式  0:按下播放，松开停止  1:按下按键时播放固定时长
